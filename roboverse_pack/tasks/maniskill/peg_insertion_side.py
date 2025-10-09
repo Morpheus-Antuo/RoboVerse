@@ -1,10 +1,12 @@
 """The base class and derived classes for the peg-insertion task from ManiSkill."""
+import torch
 
 from metasim.constants import PhysicStateType
 from metasim.example.example_pack.tasks.checkers import DetectedChecker, RelativeBboxDetector
 from metasim.scenario.objects import RigidObjCfg
 from metasim.scenario.scenario import ScenarioCfg
 from metasim.task.registry import register_task
+from metasim.utils.state import TensorState
 
 from .maniskill_base import ManiskillBaseTask
 
@@ -19,17 +21,28 @@ class PegInsertionSideBaseTask(ManiskillBaseTask):
     """
 
     # task horizon
-    max_episode_steps = 250
-    checker = DetectedChecker(
-        obj_name="stick",
-        detector=RelativeBboxDetector(
-            base_obj_name="box",
-            relative_quat=[1, 0, 0, 0],
-            relative_pos=[-0.05, 0, 0],
-            checker_lower=[-0.05, -0.1, -0.1],
-            checker_upper=[0.05, 0.1, 0.1],
-        ),
-    )
+    max_episode_steps = 500
+    # checker = DetectedChecker(
+    #     obj_name="stick",
+    #     detector=RelativeBboxDetector(
+    #         base_obj_name="box",
+    #         relative_quat=[1, 0, 0, 0],
+    #         relative_pos=[-0.05, 0, 0],
+    #         checker_lower=[-0.05, -0.1, -0.1],
+    #         checker_upper=[0.05, 0.1, 0.1],
+    #     ),
+    # )
+
+    # rewrite terminate
+    def _terminated(self, states: TensorState) -> torch.Tensor:
+        """No terminate condition yet. Will terminate when time is up."""
+        return torch.tensor([False])
+
+    # rewrite checker
+    def reset(self, states=None, env_ids=None):
+        """Skip checker reset."""
+        states = super(ManiskillBaseTask, self).reset(states, env_ids)
+        return states
 
 
 @register_task("maniskill.peg_insertion_side_363", "peg_insertion_side_363")
@@ -5982,13 +5995,15 @@ class PegInsertionSide0Task(PegInsertionSideBaseTask):
         objects=[
             RigidObjCfg(
                 name="box",
-                usd_path="roboverse_data/assets/maniskill/peg/base_0.usd",
+                usd_path="roboverse_data/assets/maniskill/peg/base_0/base_0.usd",
+                urdf_path="roboverse_data/assets/maniskill/peg/base_0/base_0.urdf",
                 physics=PhysicStateType.GEOM,
                 fix_base_link=True,
             ),
             RigidObjCfg(
                 name="stick",
-                usd_path="roboverse_data/assets/maniskill/peg/stick_0.usd",
+                usd_path="roboverse_data/assets/maniskill/peg/stick_0/stick_0.usd",
+                urdf_path="roboverse_data/assets/maniskill/peg/stick_0/stick_0.urdf",
                 physics=PhysicStateType.RIGIDBODY,
             ),
         ]
