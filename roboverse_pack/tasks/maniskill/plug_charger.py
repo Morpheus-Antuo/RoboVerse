@@ -1,10 +1,13 @@
 """The plug charger task from ManiSkill."""
 
+import torch
+
 from metasim.constants import PhysicStateType
 from metasim.example.example_pack.tasks.checkers import DetectedChecker, RelativeBboxDetector
 from metasim.scenario.objects import RigidObjCfg
 from metasim.scenario.scenario import ScenarioCfg
 from metasim.task.registry import register_task
+from metasim.utils.state import TensorState
 
 from .maniskill_base import ManiskillBaseTask
 
@@ -38,14 +41,25 @@ class PlugChargerTask(ManiskillBaseTask):
     )
     traj_filepath = "roboverse_data/trajs/maniskill/plug_charger/trajectory-franka_v2.pkl"
 
-    checker = DetectedChecker(
-        obj_name="charger",
-        detector=RelativeBboxDetector(
-            base_obj_name="base",
-            relative_quat=[1, 0, 0, 0],
-            relative_pos=[0, 0, 0],
-            checker_lower=[-0.02, -0.075, -0.075],
-            checker_upper=[0.02, 0.075, 0.075],
-            # debug_vis=True,
-        ),
-    )
+    # checker = DetectedChecker(
+    #     obj_name="charger",
+    #     detector=RelativeBboxDetector(
+    #         base_obj_name="base",
+    #         relative_quat=[1, 0, 0, 0],
+    #         relative_pos=[0, 0, 0],
+    #         checker_lower=[-0.02, -0.075, -0.075],
+    #         checker_upper=[0.02, 0.075, 0.075],
+    #         # debug_vis=True,
+    #     ),
+    # )
+
+        # rewrite terminate
+    def _terminated(self, states: TensorState) -> torch.Tensor:
+        """No terminate condition yet. Will terminate when time is up."""
+        return torch.tensor([False])
+
+    # rewrite checker
+    def reset(self, states=None, env_ids=None):
+        """Skip checker reset."""
+        states = super(ManiskillBaseTask, self).reset(states, env_ids)
+        return states
