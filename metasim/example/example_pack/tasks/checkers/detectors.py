@@ -39,6 +39,33 @@ class BaseDetector:
 
 
 @configclass
+class CombinedDetector(BaseDetector):
+    """A class to combine two detectors."""
+
+    detector1: BaseDetector = MISSING
+    """The first detector."""
+    detector2: BaseDetector = MISSING
+    """The second detector."""
+
+    def reset(self, handler: BaseSimHandler, env_ids: list[int] | None = None):
+        self.detector1.reset(handler, env_ids)
+        self.detector2.reset(handler, env_ids)
+
+    def is_detected(self, handler: BaseSimHandler, obj_name: str) -> torch.BoolTensor:
+        return self.detector1.is_detected(handler, obj_name) & self.detector2.is_detected(handler, obj_name)
+
+    def get_debug_viewers(self) -> list[BaseObjCfg]:
+        viewers = []
+        viewers.extend(self.detector1.get_debug_viewers())
+        viewers.extend(self.detector2.get_debug_viewers())
+        return viewers
+
+    def reset_debug_viewer(self, handler: BaseSimHandler, env_ids: list[int]):
+        """Reset the debug viewer for both detectors."""
+        self.detector1.reset_debug_viewer(handler, env_ids)
+        self.detector2.reset_debug_viewer(handler, env_ids)
+
+@configclass
 class RelativeBboxDetector(BaseDetector):
     """Check if the object is in the bounding box detector.
 
@@ -179,12 +206,12 @@ class Relative2DSphereDetector(BaseDetector):
         relative_pos = torch.tensor(self.relative_pos, dtype=torch.float32)  # [3]
 
         base_pos = get_pos(handler, self.base_obj_name, env_ids=env_ids)
-
+        base_pos = base_pos.to(relative_pos.device)
         self.checker_pos = base_pos + relative_pos
 
     def is_detected(self, handler: BaseSimHandler, obj_name: str) -> torch.BoolTensor:
         obj_pos = get_pos(handler, obj_name)
-
+        obj_pos = obj_pos.to(self.checker_pos.device)
         object_in_checker = (
             torch.norm(obj_pos[:, self.axis] - self.checker_pos[:, self.axis], p=2, dim=-1) < self.radius
         )

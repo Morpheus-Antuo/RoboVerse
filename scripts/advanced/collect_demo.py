@@ -785,6 +785,8 @@ def main():
 
             if not run_out[env_id] and steps_after_success[env_id] < args.tot_steps_after_success:
                 steps_after_success[env_id] += 1
+                collector.save(demo_idx)
+
             else:
                 steps_after_success[env_id] = 0
                 collector.save(demo_idx)
@@ -812,6 +814,7 @@ def main():
 
             demo_idx = demo_idxs[env_id]
             log.info(f"Demo {demo_idx} in Env {env_id} timed out!")
+            collector.save(demo_idx)
             collector.mark_fail(demo_idx)
             collector.delete(demo_idx)
             failure_count[env_id] += 1
