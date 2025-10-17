@@ -1,0 +1,9 @@
+<?xml version="1.0" ?>
+<mujoco model="PlaceSphereBin">
+  <asset>
+    <mesh name="PlaceSphereBin" file="/home/ntu/Desktop/ant/RoboVerse/roboverse_data/assets/maniskill/PlaceSphere/bin/bin.stl" />
+  </asset>
+  <worldbody>
+    <geom type="mesh" mesh="PlaceSphereBin" />
+  </worldbody>
+</mujoco>
