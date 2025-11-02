@@ -34,12 +34,15 @@ Guidelines for modifications:
 * Ran Gong
 * Siheng Zhao
 * Songlin Wei
+* Xinying Guo
 * Yikai Tang
+* Yuchen Huang
 * Yuran Wang
 * Yutong Liang
 * Yuyang Li
 * Zhigen Zhao
 * Xinjie Wang
+* Liu Liu
 
 ## Acknowledgements
 
