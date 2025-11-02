@@ -1,9 +1,0 @@
-<?xml version="1.0" ?>
-<mujoco model="stick">
-  <asset>
-    <mesh name="stick" file="/home/ntu/Desktop/ant/RoboVerse/roboverse_data/assets/maniskill/PokeCube/stick.stl" />
-  </asset>
-  <worldbody>
-    <geom type="mesh" mesh="stick" />
-  </worldbody>
-</mujoco>
