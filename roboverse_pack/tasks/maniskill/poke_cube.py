@@ -1,4 +1,4 @@
-pokefrom __future__ import annotations
+from __future__ import annotations
 
 from metasim.constants import PhysicStateType
 from metasim.example.example_pack.tasks.checkers.checkers import DetectedChecker
