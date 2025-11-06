@@ -7,7 +7,6 @@ from metasim.scenario.objects import PrimitiveCubeCfg, PrimitiveCylinderCfg, Rig
 from metasim.scenario.scenario import ScenarioCfg
 from metasim.task.registry import register_task
 
-
 from .maniskill_base import ManiskillBaseTask
 
 reach_distance = 0.6  # The distance the robot can reach
@@ -41,36 +40,36 @@ class PullCubeToolCfg(ManiskillBaseTask):
     pull_cube_tool.mp4
     ### notes:
     - note that the checker is not the same as the one in the original task. Current chekcer checks if the cube is within a sphere of radius reach_distance around the base of the robot.
-    """
+    """  # noqa: D205
 
     episode_length = 250
-    
+
     scenario = ScenarioCfg(
-        objects = [
-        PrimitiveCylinderCfg(
-            name="franka_base",
-            radius=0.02,
-            height=0.0001,
-            color=[0.0, 0.0, 0.0],
-            collision_enabled=False,
-            physics=PhysicStateType.XFORM,
-            fix_base_link=True,  # Fix the goal region to the ground
-        ),
-        PrimitiveCubeCfg(
-            name="cube",
-            size=[0.04, 0.04, 0.04],
-            mass=0.02,
-            physics=PhysicStateType.RIGIDBODY,
-            color=[1.0, 0.0, 0.0],
-        ),
-        RigidObjCfg(
-            name="tool",
-            mjcf_path="roboverse_data/assets/maniskill/PullCubeTool/tool/mjcf/PullCubeTool_tool.xml",
-            usd_path="roboverse_data/assets/maniskill/PullCubeTool/tool/usd/PullCubeTool_tool.usd",
-            urdf_path="roboverse_data/assets/maniskill/PullCubeTool/tool/urdf/PullCubeTool_tool.urdf",
-            physics=PhysicStateType.RIGIDBODY,
-        ),
-    ]
+        objects=[
+            PrimitiveCylinderCfg(
+                name="franka_base",
+                radius=0.02,
+                height=0.0001,
+                color=[0.0, 0.0, 0.0],
+                collision_enabled=False,
+                physics=PhysicStateType.XFORM,
+                fix_base_link=True,  # Fix the goal region to the ground
+            ),
+            PrimitiveCubeCfg(
+                name="cube",
+                size=[0.04, 0.04, 0.04],
+                mass=0.02,
+                physics=PhysicStateType.RIGIDBODY,
+                color=[1.0, 0.0, 0.0],
+            ),
+            RigidObjCfg(
+                name="tool",
+                mjcf_path="roboverse_data/assets/maniskill/PullCubeTool/tool/mjcf/PullCubeTool_tool.xml",
+                usd_path="roboverse_data/assets/maniskill/PullCubeTool/tool/usd/PullCubeTool_tool.usd",
+                urdf_path="roboverse_data/assets/maniskill/PullCubeTool/tool/urdf/PullCubeTool_tool.urdf",
+                physics=PhysicStateType.RIGIDBODY,
+            ),
+        ]
     )
 
     detector = Relative2DSphereDetector(

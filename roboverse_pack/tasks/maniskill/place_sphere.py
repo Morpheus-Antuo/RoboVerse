@@ -1,12 +1,11 @@
 from __future__ import annotations
 
 from metasim.constants import PhysicStateType
-from metasim.example.example_pack.tasks.checkers.checkers import PositionShiftChecker, DetectedChecker
+from metasim.example.example_pack.tasks.checkers.checkers import DetectedChecker
 from metasim.example.example_pack.tasks.checkers.detectors import RelativeBboxDetector
-from metasim.scenario.objects import PrimitiveCubeCfg, RigidObjCfg, PrimitiveSphereCfg
+from metasim.scenario.objects import PrimitiveSphereCfg, RigidObjCfg
 from metasim.scenario.scenario import ScenarioCfg
 from metasim.task.registry import register_task
-
 
 from .maniskill_base import ManiskillBaseTask
 
@@ -32,7 +31,7 @@ class PlaceSphereTask(ManiskillBaseTask):
     ### official_url:
     https://maniskill.readthedocs.io/en/latest/tasks/table_top_gripper/index.html#placesphere-v1
     ### poster_url:
-    (none)
+    (none).
     ---
     ### video_url:
     place_sphere.mp4
@@ -41,26 +40,27 @@ class PlaceSphereTask(ManiskillBaseTask):
     - isaaclab
     ### notes:
     (none)
-    """
+    """  # noqa: D205
+
     scenario = ScenarioCfg(
-        objects = [
-        RigidObjCfg(
-            name="bin",
-            usd_path="roboverse_data/assets/maniskill/PlaceSphere/bin/usd/bin.usd",
-            mjcf_path="roboverse_data/assets/maniskill/PlaceSphere/bin/mjcf/PlaceSphere_bin.xml",
-            urdf_path="roboverse_data/assets/maniskill/PlaceSphere/bin/urdf/PlaceSphere_bin.urdf",
-            physics=PhysicStateType.RIGIDBODY,
-        ),
-        PrimitiveSphereCfg(
-            name="sphere",
-            radius=0.03,
-            mass=0.001,
-            physics=PhysicStateType.RIGIDBODY,
-            color=[1.0, 0.0, 0.0],
-        ),
-    ]
+        objects=[
+            RigidObjCfg(
+                name="bin",
+                usd_path="roboverse_data/assets/maniskill/PlaceSphere/bin/usd/bin.usd",
+                mjcf_path="roboverse_data/assets/maniskill/PlaceSphere/bin/mjcf/PlaceSphere_bin.xml",
+                urdf_path="roboverse_data/assets/maniskill/PlaceSphere/bin/urdf/PlaceSphere_bin.urdf",
+                physics=PhysicStateType.RIGIDBODY,
+            ),
+            PrimitiveSphereCfg(
+                name="sphere",
+                radius=0.03,
+                mass=0.001,
+                physics=PhysicStateType.RIGIDBODY,
+                color=[1.0, 0.0, 0.0],
+            ),
+        ]
     )
-    
+
     episode_length = 250
     checker = DetectedChecker(
         obj_name="sphere",
